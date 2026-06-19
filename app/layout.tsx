@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Raleway, Geist } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/ThemeProvider";
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

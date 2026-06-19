@@ -1,169 +1,104 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { Activity, AlertTriangle, CheckCircle, MapPin, Droplet, User, Clock, Settings, FileText, List, Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Droplet, ArrowRight, Activity, ShieldCheck, BarChart3 } from "lucide-react";
+import HeroWave from "@/components/ui/dynamic-wave-canvas-background";
 
-const MapComponent = dynamic(() => import("../components/Map"), {
-  ssr: false,
-  loading: () => <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>Memuat Peta...</div>,
-});
-
-export default function Home() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
+export default function LandingPage() {
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-      {/* Peta sebagai Latar Belakang (z-index 0) */}
-      <MapComponent />
+    <div className="min-h-screen flex flex-col font-sans transition-colors duration-300 relative bg-slate-950">
 
-      {/* Lapisan UI di atas peta (z-index 10) */}
-      <main style={{ position: 'absolute', inset: 0, zIndex: 10, pointerEvents: 'none', display: 'flex', flexDirection: 'column', padding: '1.5rem', gap: '1.5rem' }}>
-        
-        {/* Bagian Atas: Kiri dan Kanan */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', flex: 1, gap: '1rem' }}>
-          
-          {/* Panel Kiri - Ringkasan & Navigasi */}
-          <section className="border border-gray-300 rounded" style={{ width: '320px', backgroundColor: 'color-mix(in srgb, var(--background) 75%, transparent)', backdropFilter: 'blur(16px)', pointerEvents: 'auto', display: 'flex', flexDirection: 'column', padding: '1.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h1 className="font-raleway" style={{ fontSize: '1.5rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Droplet className="text-blue-500" /> Pejuang Sungai
-              </h1>
-              {mounted && (
-                <button onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")} style={{ padding: '0.5rem', borderRadius: '50%', border: '1px solid gray', backgroundColor: 'transparent', cursor: 'pointer', color: 'var(--foreground)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {resolvedTheme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
-                </button>
-              )}
-            </div>
-            <p style={{ marginTop: '0.25rem', fontSize: '0.875rem', opacity: 0.8 }}>
-              Monitoring Kualitas Air
-            </p>
-            
-            <hr style={{ margin: '1.25rem 0', borderColor: 'gray' }} />
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><MapPin size={16} /> Total Titik Pantau</span>
-                <span style={{ fontWeight: 'bold' }}>124</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#10b981', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><CheckCircle size={16} /> Status Aman</span>
-                <span style={{ fontWeight: 'bold' }}>90</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#eab308', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Activity size={16} /> Status Waspada</span>
-                <span style={{ fontWeight: 'bold' }}>24</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', color: '#ef4444', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><AlertTriangle size={16} /> Status Bahaya</span>
-                <span style={{ fontWeight: 'bold' }}>10</span>
-              </div>
-            </div>
-
-            <hr style={{ margin: '1.25rem 0', borderColor: 'gray' }} />
-            
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.875rem', listStyle: 'none', padding: 0, flex: 1 }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}><MapPin size={16} /> Peta Keseluruhan</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}><List size={16} /> Daftar Titik Sampel</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}><FileText size={16} /> Laporan Masuk</li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}><Settings size={16} /> Pengaturan</li>
-            </ul>
-
-            <button style={{ padding: '0.75rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-              <MapPin size={18} /> Laporkan Titik Baru
-            </button>
-          </section>
-
-          {/* Panel Kanan - Live Feed & Alerts */}
-          <section className="border border-gray-300 rounded" style={{ width: '320px', backgroundColor: 'color-mix(in srgb, var(--background) 75%, transparent)', backdropFilter: 'blur(16px)', pointerEvents: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
-            <h2 className="font-raleway" style={{ fontSize: '1.125rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Activity size={20} /> Peringatan & Aktivitas
-            </h2>
-            <hr style={{ margin: '1.25rem 0', borderColor: 'gray' }} />
-            
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', fontSize: '0.875rem', listStyle: 'none', padding: 0, overflowY: 'auto' }}>
-              <li style={{ paddingLeft: '10px', borderLeft: '3px solid #ef4444' }}>
-                <strong style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><AlertTriangle size={14} /> Peringatan: pH 4.0 (Bahaya)</strong>
-                <span style={{ opacity: 0.8, display: 'block', marginTop: '0.25rem' }}>Terdeteksi di Skt. Ciliwung - 2 mnt lalu</span>
-              </li>
-              <li style={{ paddingLeft: '10px', borderLeft: '3px solid #10b981' }}>
-                <strong style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}><CheckCircle size={14} /> Data Diperbarui</strong>
-                <span style={{ opacity: 0.8, display: 'block', marginTop: '0.25rem' }}>Oleh: Budi - Titik 4 - 15 mnt lalu</span>
-              </li>
-              <li style={{ paddingLeft: '10px', borderLeft: '3px solid #3b82f6' }}>
-                <strong style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}><FileText size={14} /> Laporan Baru Masuk</strong>
-                <span style={{ opacity: 0.8, display: 'block', marginTop: '0.25rem' }}>Oleh: Relawan01 - Manggarai - 1 jam lalu</span>
-              </li>
-            </ul>
-          </section>
-
+      {/* Header */}
+      <header className="px-6 py-4 flex items-center justify-between border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        {/* Logo */}
+        <div className="flex items-center gap-2 font-raleway font-bold text-xl text-white">
+          <Droplet className="text-blue-500" /> Pejuang Sungai
         </div>
 
-        {/* Panel Bawah - Detail Titik Spesifik */}
-        <section className="border border-gray-300 rounded" style={{ width: '100%', backgroundColor: 'color-mix(in srgb, var(--background) 75%, transparent)', backdropFilter: 'blur(16px)', pointerEvents: 'auto', padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <h2 className="font-raleway" style={{ fontSize: '1.25rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <MapPin size={24} color="#3b82f6" /> Titik Sampel 1 - Manggarai
-              </h2>
-              <p style={{ fontSize: '0.875rem', opacity: 0.7, marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Clock size={14} /> Terakhir diupdate: Hari ini, 14:30 WIB | Koordinat: -6.2088, 106.8456
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', border: '1px solid gray', borderRadius: '4px', cursor: 'pointer', color: 'var(--foreground)' }}>Lihat Riwayat</button>
-              <button style={{ padding: '0.5rem 1rem', backgroundColor: '#10b981', border: 'none', color: 'white', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>Verifikasi Laporan</button>
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+          <Link href="#fitur" className="hover:text-white transition-colors">Fitur</Link>
+          <Link href="#tentang" className="hover:text-white transition-colors">Tentang Kami</Link>
+          <Link href="#kontak" className="hover:text-white transition-colors">Kontak</Link>
+        </nav>
+
+        {/* Auth Buttons */}
+        <div className="flex items-center gap-3">
+          <Link href="/login" className="px-4 py-2 text-sm font-semibold text-slate-300 hover:text-white transition-colors">
+            Sign In
+          </Link>
+          <Link href="/register" className="px-5 py-2 text-sm font-semibold text-white border border-slate-600 hover:bg-slate-800 rounded-sm transition-colors shadow-sm">
+            Sign Up
+          </Link>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-20 relative overflow-hidden">
+
+        <div className="z-10 w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Kiri: Teks dan CTA */}
+          <div className="space-y-2 text-left">
+
+
+            <h1 className="text-4xl md:text-6xl lg:text-6xl font-extrabold text-white tracking-tight font-raleway leading-tight">
+              Jaga Kualitas Air <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Untuk Masa Depan</span>
+            </h1>
+
+            <p className="md:text-  lg text-slate-400 max-w-xl leading-relaxed">
+              Pejuang Sungai adalah platform pemantauan kualitas air real-time. Laporkan titik pencemaran, analisis data, dan berkontribusi untuk pelestarian lingkungan perairan kita.
+            </p>
+
+            <div className="pt-8 flex flex-col sm:flex-row items-center sm:justify-start gap-4">
+              <Link
+                href="/dashboard"
+                className="px-6 py-4   border border-white text-white rounded-sm  text-md transition-transform  flex items-center justify-center gap-2  hover:shadow-blue-500/25"
+              >
+                Buka Dashboard <ArrowRight size={20} />
+              </Link>
             </div>
           </div>
-          
-          <hr style={{ borderColor: 'gray', opacity: 0.5, margin: 0 }} />
 
-          <div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            <div>
-              <p style={{ fontSize: '0.75rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Kualitas Air</p>
-              <p style={{ fontWeight: 'bold', fontSize: '1.25rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><CheckCircle size={18} /> Baik</p>
+          {/* Kanan: Gambar Hero */}
+          <div className="relative z-10 hidden lg:block perspective-1000">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 transform transition-transform hover:scale-[1.02] hover:rotate-y-2 duration-500">
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-transparent mix-blend-overlay z-10 pointer-events-none"></div>
+              <img
+                src="/hero-picture.png"
+                alt="Platform Pejuang Sungai"
+                className="w-full h-auto object-cover"
+              />
             </div>
-            <div>
-              <p style={{ fontSize: '0.75rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tingkat pH</p>
-              <p style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>7.2</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '0.75rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Suhu Air</p>
-              <p style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>26.5 °C</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '0.75rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Kekeruhan</p>
-              <p style={{ fontWeight: 'bold', fontSize: '1.25rem' }}>Rendah (12 NTU)</p>
-            </div>
-            
-            {/* Dummy Mini Chart Container */}
-            <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-              <p style={{ fontSize: '0.75rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tren pH (7 Hari Terakhir)</p>
-              <div style={{ display: 'flex', alignItems: 'flex-end', height: '30px', gap: '4px' }}>
-                <div style={{ width: '12%', height: '80%', backgroundColor: '#3b82f6', borderRadius: '2px' }}></div>
-                <div style={{ width: '12%', height: '85%', backgroundColor: '#3b82f6', borderRadius: '2px' }}></div>
-                <div style={{ width: '12%', height: '70%', backgroundColor: '#3b82f6', borderRadius: '2px' }}></div>
-                <div style={{ width: '12%', height: '75%', backgroundColor: '#3b82f6', borderRadius: '2px' }}></div>
-                <div style={{ width: '12%', height: '90%', backgroundColor: '#3b82f6', borderRadius: '2px' }}></div>
-                <div style={{ width: '12%', height: '95%', backgroundColor: '#3b82f6', borderRadius: '2px' }}></div>
-                <div style={{ width: '12%', height: '100%', backgroundColor: '#10b981', borderRadius: '2px' }}></div>
-              </div>
-            </div>
-
-            <div>
-              <p style={{ fontSize: '0.75rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pelapor</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: '#cbd5e1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.7rem', color: 'black', fontWeight: 'bold' }}>JD</div>
-                <p style={{ fontWeight: 'bold', fontSize: '0.875rem' }}>John Doe</p>
-              </div>
-            </div>
+            {/* Decorative Glow */}
+            <div className="absolute -inset-4 bg-blue-500/20 blur-3xl -z-10 rounded-full"></div>
           </div>
-        </section>
+        </div>
 
+        {/* Feature Highlights */}
+        <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl z-10 text-left">
+          <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-sm backdrop-blur-sm transition-transform hover:-translate-y-1">
+            <div className="bg-blue-900/50 w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-blue-400">
+              <Activity size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Real-time Monitoring</h3>
+            <p className="text-slate-400">Pantau data kualitas air seperti pH, suhu, dan kekeruhan secara langsung dari berbagai titik sampel.</p>
+          </div>
+          <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-sm backdrop-blur-sm transition-transform hover:-translate-y-1">
+            <div className="bg-green-900/50 w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-green-400">
+              <ShieldCheck size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Validasi Data</h3>
+            <p className="text-slate-400">Setiap laporan diverifikasi untuk memastikan akurasi data sebelum dipublikasikan ke publik.</p>
+          </div>
+          <div className="bg-slate-900/50 p-6 rounded-2xl border border-slate-800 shadow-sm backdrop-blur-sm transition-transform hover:-translate-y-1">
+            <div className="bg-purple-900/50 w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-purple-400">
+              <BarChart3 size={24} />
+            </div>
+            <h3 className="text-xl font-bold text-white mb-2">Laporan & Analitik</h3>
+            <p className="text-slate-400">Unduh laporan lengkap dalam format PDF dan lihat tren kualitas air dari waktu ke waktu.</p>
+          </div>
+        </div>
       </main>
     </div>
   );
