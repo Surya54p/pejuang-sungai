@@ -13,22 +13,39 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
  
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
  
-    setTimeout(() => {
-      if (isGuest) {
-        if (!name.trim()) {
-          setError("Nama tidak boleh kosong.");
+    if (isGuest) {
+      if (!name.trim()) {
+        setError("Nama tidak boleh kosong.");
+        setIsLoading(false);
+        return;
+      }
+      try {
+        const res = await fetch("/api/guests", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: name.trim() }),
+        });
+        if (!res.ok) {
+          setError("Gagal mendaftarkan tamu ke database.");
           setIsLoading(false);
           return;
         }
         localStorage.setItem("userName", name.trim());
         localStorage.setItem("userRole", "tamu");
         router.push("/dashboard");
-      } else {
+      } catch (err) {
+        setError("Gagal terhubung ke server.");
+        setIsLoading(false);
+      }
+    } else {
+      setTimeout(() => {
         if (email === "admin@pejuangsungai.go.id" && password === "admin123") {
           localStorage.setItem("userName", "Admin Dinas LH");
           localStorage.setItem("userRole", "admin");
@@ -37,8 +54,8 @@ export default function LoginPage() {
           setError("Email atau password yang Anda masukkan salah.");
           setIsLoading(false);
         }
-      }
-    }, 800);
+      }, 800);
+    }
   };
  
   return (
