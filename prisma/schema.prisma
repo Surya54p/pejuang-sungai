@@ -11,3 +11,54 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  email       String?      @unique
+  role        String       @default("petugas")
+  waterPoints WaterPoint[]
+
+  @@map("users")
+}
+
+model Guest {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  role        String       @default("tamu")
+  waterPoints WaterPoint[]
+
+  @@map("guests")
+}
+
+model WaterPoint {
+  id         Int      @id @default(autoincrement())
+  title      String
+  location   String   // Kecamatan
+  reporterId Int?     @map("reporter_id")
+  reporter   User?    @relation(fields: [reporterId], references: [id])
+  guestId    Int?     @map("guest_id")
+  guest      Guest?   @relation(fields: [guestId], references: [id])
+  datetime   DateTime @default(now())
+  type       String   // "bersih" or "limbah"
+  ph         Float
+  temp       Float
+  turbidity  Float
+  tds        Int
+  tss        Int
+  do_level   Float    @map("do")
+  bod        Float
+  cod        Float
+  ecoli      Int
+  coliform   Int
+  klorin     Float
+  besi       Float
+  pb         Float
+  merkuri    Float
+  nitrat     Float
+  photo      String
+  latitude   Float
+  longitude  Float
+
+  @@map("water_points")
+}
